@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Armaghan Nikfar — AI Developer &amp; Frontend Engineer &amp; Researcher</title>
+<meta name="description" content="Portfolio of Armaghan Nikfar — AI developer and full-stack engineer working at the intersection of software engineering and applied machine learning.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#080B14;
+    --card:rgba(15,21,36,0.72);
+    --card-solid:#0E1524;
+    --card-border:rgba(107,169,255,0.22);
+    --blue:#4FD1FF;
+    --blue2:#4C7DFF;
+    --violet:#8B5CF6;
+    --pink:#E14EC0;
+    --grad:linear-gradient(135deg,var(--blue),var(--blue2));
+    --text:#EEF3FA;
+    --muted:#8C99B7;
+    --muted-dim:#5B6584;
+    --radius:28px;
+    --maxw:880px;
+    --dock-w:88px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--blue);color:#04101C;}
+  h1,h2,h3,h4{font-family:'Outfit',sans-serif;margin:0;letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono',monospace;letter-spacing:0.03em;}
+  a{color:inherit;}
+  img{max-width:100%;}
+
+  /* ---------- ambient background ---------- */
+  .bg-decor{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+  .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.35;}
+  .blob-1{width:520px;height:520px;background:var(--blue2);top:-120px;right:-160px;}
+  .blob-2{width:460px;height:460px;background:var(--violet);top:38%;right:-200px;}
+  .blob-3{width:420px;height:420px;background:var(--pink);bottom:-140px;right:-120px;opacity:0.22;}
+  .blob-4{width:380px;height:380px;background:var(--blue);top:60%;left:-180px;opacity:0.16;}
+  .deco-ring{position:absolute;top:8%;right:6%;width:180px;height:180px;opacity:0.5;animation:spin 50s linear infinite;}
+  .deco-wave{position:absolute;bottom:14%;right:10%;width:150px;opacity:0.4;}
+  .deco-diamond{position:absolute;top:46%;right:16%;width:110px;opacity:0.35;animation:float 8s ease-in-out infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-16px);}}
+
+  /* ---------- top bar (mobile) ---------- */
+  .topbar{
+    position:fixed;top:0;left:0;right:0;z-index:60;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 22px;
+  }
+  .brand{
+    font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;
+    display:flex;align-items:center;gap:8px;text-decoration:none;
+  }
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--grad);box-shadow:0 0 10px var(--blue);}
+  .hamburger{
+    display:none;
+    width:42px;height:42px;border-radius:12px;
+    background:var(--card);border:1px solid var(--card-border);
+    align-items:center;justify-content:center;
+    cursor:pointer;
+  }
+  .hamburger svg{width:20px;height:20px;stroke:var(--text);}
+
+  /* ---------- fixed icon dock ---------- */
+  .dock{
+    position:fixed;top:50%;left:22px;transform:translateY(-50%);
+    z-index:70;
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    background:rgba(12,17,29,0.65);
+    border:1px solid var(--card-border);
+    backdrop-filter:blur(14px);
+    padding:16px 10px;
+    border-radius:999px;
+  }
+  .dock-item{
+    width:42px;height:42px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--muted);
+    text-decoration:none;
+    transition:background .2s ease, color .2s ease, transform .2s ease;
+  }
+  .dock-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;}
+  .dock-item:hover{color:var(--text);transform:translateY(-2px);}
+  .dock-item.active{background:var(--grad);color:#04101C;box-shadow:0 0 16px rgba(79,209,255,0.55);}
+
+  /* ---------- mobile menu overlay ---------- */
+  .mobile-menu{
+    position:fixed;inset:0;z-index:80;
+    background:rgba(6,9,16,0.97);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:26px;
+    opacity:0;pointer-events:none;
+    transition:opacity .25s ease;
+  }
+  .mobile-menu.open{opacity:1;pointer-events:auto;}
+  .mobile-menu a{
+    font-family:'Outfit',sans-serif;font-size:22px;font-weight:600;
+    color:var(--text);text-decoration:none;display:flex;align-items:center;gap:12px;
+  }
+  .mobile-menu a svg{width:20px;height:20px;stroke:var(--blue);fill:none;stroke-width:1.8;}
+  .menu-close{
+    position:absolute;top:20px;right:22px;
+    width:42px;height:42px;border-radius:12px;
+    background:var(--card);border:1px solid var(--card-border);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .menu-close svg{width:18px;height:18px;stroke:var(--text);}
+
+  /* ---------- content / cards ---------- */
+  main.content{
+    position:relative;z-index:1;
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:120px 24px 60px calc(var(--dock-w) + 24px);
+  }
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius);
+    backdrop-filter:blur(18px);
+    box-shadow:0 30px 70px -30px rgba(0,0,0,0.7);
+    padding:52px;
+    margin-bottom:32px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";position:absolute;top:22px;right:26px;
+    width:3px;height:34px;border-radius:3px;background:var(--grad);opacity:0.8;
+  }
+  .card-tag{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--blue);
+    display:inline-flex;align-items:center;gap:8px;margin-bottom:18px;
+  }
+  .card-tag::before{content:"";width:16px;height:1px;background:var(--blue);}
+  .card h2{font-size:clamp(24px,3.2vw,32px);font-weight:700;margin-bottom:10px;}
+  .card > p.lede{color:var(--muted);max-width:560px;font-size:15px;margin:0 0 30px;}
+
+  /* ---------- hero card ---------- */
+  .hero-card{text-align:center;padding:60px 40px 48px;}
+  .avatar-wrap{position:relative;width:132px;height:132px;margin:0 auto 26px;}
+  .avatar-ring{
+    position:absolute;inset:-8px;border-radius:50%;
+    background:conic-gradient(from 0deg, var(--blue), var(--violet), var(--pink), var(--blue));
+    animation:spin 8s linear infinite;
+  }
+  .avatar-ring::after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--card-solid);}
+  .avatar-wrap img{
+    position:relative;width:132px;height:132px;border-radius:50%;object-fit:cover;
+    border:3px solid var(--card-solid);z-index:1;
+  }
+  .hero-card h1{font-size:clamp(28px,4.4vw,40px);font-weight:700;margin-bottom:8px;}
+  .hero-card h1 .accent{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero-card .role-line{
+    font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--blue);margin-bottom:20px;
+  }
+  .hero-card p.desc{color:var(--muted);max-width:480px;margin:0 auto 32px;font-size:15px;}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+  .btn{
+    font-family:'Outfit',sans-serif;font-weight:600;font-size:14.5px;
+    text-decoration:none;padding:14px 28px;border-radius:999px;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .btn-primary{background:var(--grad);color:#04101C;}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(79,209,255,0.35);}
+  .btn-ghost{border:1px solid var(--card-border);color:var(--text);}
+  .btn-ghost:hover{border-color:var(--blue);transform:translateY(-2px);}
+
+  /* ---------- about ---------- */
+  .about-body{display:flex;gap:34px;align-items:flex-start;flex-wrap:wrap;}
+  .about-photo{
+    width:150px;height:150px;border-radius:20px;object-fit:cover;flex-shrink:0;
+    border:1px solid var(--card-border);
+  }
+  .about-text{flex:1;min-width:240px;}
+  .about-text p{color:#C7D3E9;font-size:15px;margin:0 0 16px;}
+  .stat-row{display:flex;gap:30px;margin-top:22px;flex-wrap:wrap;}
+  .stat .n{font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;color:var(--blue);display:block;}
+  .stat .l{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);}
+
+  /* ---------- research ---------- */
+  .paper{
+    background:rgba(255,255,255,0.02);
+    border:1px solid var(--card-border);
+    border-radius:18px;padding:26px;margin-bottom:20px;
+  }
+  .paper:last-child{margin-bottom:0;}
+  .paper-meta{display:flex;gap:16px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted-dim);margin-bottom:12px;}
+  .paper h3{font-size:18px;font-weight:700;margin-bottom:12px;}
+  .paper p{color:var(--muted);font-size:14px;margin:0 0 14px;}
+  .note-box{
+    background:rgba(79,209,255,0.06);border:1px solid rgba(79,209,255,0.25);
+    border-radius:12px;padding:15px 17px;font-size:13px;color:#BCE0F7;margin:14px 0 16px;
+  }
+  .note-box b{color:var(--blue);font-family:'JetBrains Mono',monospace;font-size:10.5px;text-transform:uppercase;display:block;margin-bottom:6px;}
+  .tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:5px 11px;border-radius:999px;border:1px solid var(--card-border);color:var(--muted);}
+  .paper-link{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue);text-decoration:none;}
+  .paper-link:hover{text-decoration:underline;}
+
+  /* ---------- experience ---------- */
+  .timeline{position:relative;padding-left:64px;}
+  .timeline::before{content:"";position:absolute;left:20px;top:6px;bottom:6px;width:1px;background:var(--card-border);}
+  .t-item{position:relative;padding-bottom:36px;}
+  .t-item:last-child{padding-bottom:0;}
+  .t-node{
+    position:absolute;left:-64px;top:0;width:40px;height:40px;border-radius:50%;
+    background:var(--card-solid);border:1px solid var(--card-border);
+    display:flex;align-items:center;justify-content:center;color:var(--muted-dim);
+  }
+  .t-node svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;}
+  .t-item.current .t-node{background:var(--grad);color:#04101C;box-shadow:0 0 14px rgba(79,209,255,0.5);}
+  .t-year{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted-dim);margin-bottom:4px;}
+  .t-role{font-size:16.5px;font-weight:700;margin-bottom:3px;}
+  .t-org{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--blue);display:block;margin-bottom:8px;}
+  .t-item p,.t-item ul{color:var(--muted);font-size:13.5px;margin:0;}
+  .t-item ul{padding-left:16px;margin-top:6px;}
+  .t-item li{margin-bottom:4px;}
+
+  /* ---------- education (two column) ---------- */
+  .edu-cols{display:grid;grid-template-columns:1fr 1fr;gap:34px;}
+  .edu-col h4{
+    font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;
+    letter-spacing:0.06em;color:var(--blue);margin-bottom:18px;
+  }
+  .edu-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px;}
+  .edu-row:last-child{margin-bottom:0;}
+  .edu-icon{
+    width:36px;height:36px;border-radius:10px;flex-shrink:0;
+    background:rgba(79,209,255,0.08);border:1px solid var(--card-border);
+    display:flex;align-items:center;justify-content:center;color:var(--blue);
+  }
+  .edu-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;}
+  .edu-row h5{font-size:14.5px;font-weight:600;margin:0 0 2px;}
+  .edu-row span{font-size:12.5px;color:var(--muted);}
+
+  /* ---------- skills ---------- */
+  .skills-body{display:flex;gap:40px;align-items:center;flex-wrap:wrap;}
+  .skills-illus{flex-shrink:0;width:190px;}
+  .skills-bars{flex:1;min-width:240px;}
+  .bar-item{margin-bottom:16px;}
+  .bar-item:last-child{margin-bottom:0;}
+  .bar-top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px;}
+  .bar-top span:first-child{color:var(--text);font-weight:500;}
+  .bar-top span:last-child{font-family:'JetBrains Mono',monospace;color:var(--blue);}
+  .bar-track{height:7px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;}
+  .bar-fill{height:100%;border-radius:999px;background:var(--grad);width:0;transition:width 1.1s ease;}
+  .pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px;}
+  .pill{font-size:12px;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,0.03);border:1px solid var(--card-border);color:#C6D1E8;}
+
+  /* ---------- contact ---------- */
+  .contact-card{text-align:center;}
+  .contact-card h2{max-width:520px;margin:0 auto 12px;}
+  .contact-card p.lede{margin:0 auto 30px;}
+  .contact-links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+  .contact-links a{
+    font-family:'JetBrains Mono',monospace;font-size:12px;text-decoration:none;
+    padding:12px 20px;border-radius:999px;border:1px solid var(--card-border);
+    color:var(--text);transition:border-color .2s ease,color .2s ease;
+  }
+  .contact-links a:hover{border-color:var(--blue);color:var(--blue);}
+  .foot-meta{
+    text-align:center;margin-top:36px;font-family:'JetBrains Mono',monospace;
+    font-size:10.5px;color:var(--muted-dim);
+  }
+
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ---------- responsive ---------- */
+  @media(max-width:900px){
+    :root{--dock-w:0px;}
+    .topbar{display:none;}
+    .hamburger{display:none;}
+    .mobile-menu{display:none;}
+    .dock{
+      top:14px;left:50%;right:auto;bottom:auto;
+      transform:translateX(-50%);
+      flex-direction:row;
+      gap:4px;
+      padding:8px 10px;
+      max-width:calc(100% - 24px);
+      overflow-x:auto;
+      -ms-overflow-style:none;scrollbar-width:none;
+    }
+    .dock::-webkit-scrollbar{display:none;}
+    .dock-item{width:36px;height:36px;flex-shrink:0;}
+    .dock-item svg{width:15px;height:15px;}
+    main.content{padding:88px 20px 50px;}
+    .card{padding:36px 26px;}
+    .edu-cols{grid-template-columns:1fr;gap:26px;}
+    .skills-body{gap:26px;}
+    .skills-illus{width:130px;margin:0 auto;}
+  }
+  @media(max-width:520px){
+    .dock{padding:6px 8px;gap:2px;}
+    .dock-item{width:32px;height:32px;}
+    .dock-item svg{width:13px;height:13px;}
+    .card{padding:28px 20px;border-radius:22px;}
+    .hero-card{padding:48px 22px 40px;}
+    .avatar-wrap,.avatar-wrap img{width:104px;height:104px;}
+    .about-body{flex-direction:column;align-items:center;text-align:center;}
+    .about-photo{width:120px;height:120px;}
+    .stat-row{justify-content:center;}
+    .timeline{padding-left:52px;}
+    .t-node{left:-52px;width:34px;height:34px;}
+    .t-node svg{width:14px;height:14px;}
+    .btn{padding:12px 20px;font-size:13px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important;transition-duration:0.001ms !important;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-decor" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <svg class="deco-ring" viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="none" stroke="#4FD1FF" stroke-width="1.5" stroke-dasharray="4 10"/><circle cx="100" cy="100" r="60" fill="none" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="2 8"/></svg>
+  <svg class="deco-wave" viewBox="0 0 200 60"><path d="M0,30 Q25,5 50,30 T100,30 T150,30 T200,30" fill="none" stroke="#4FD1FF" stroke-width="3" stroke-linecap="round"/></svg>
+  <svg class="deco-diamond" viewBox="0 0 100 100"><polygon points="50,4 96,50 50,96 4,50" fill="none" stroke="#E14EC0" stroke-width="2"/></svg>
+</div>
+
+<div class="topbar">
+  <a href="#top" class="brand"><span class="dot"></span>Armaghan Nikfar</a>
+  <button class="hamburger" id="menuBtn" aria-label="Open menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+  </button>
+</div>
+
+<nav class="dock" id="dock">
+  <a href="#top" class="dock-item" data-section="top" title="Home">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+  </a>
+  <a href="#about" class="dock-item" data-section="about" title="About">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+  </a>
+  <a href="#research" class="dock-item" data-section="research" title="Research">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v5l4 9a2 2 0 0 1-2 3H7a2 2 0 0 1-2-3l4-9V3z"/><line x1="9" y1="9" x2="15" y2="9"/></svg>
+  </a>
+  <a href="#experience" class="dock-item" data-section="experience" title="Experience">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+  </a>
+  <a href="#education" class="dock-item" data-section="education" title="Education">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5-10-5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>
+  </a>
+  <a href="#skills" class="dock-item" data-section="skills" title="Skills">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 2 12 8 18"/><polyline points="16 6 22 12 16 18"/></svg>
+  </a>
+  <a href="#contact" class="dock-item" data-section="contact" title="Contact">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+  </a>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose" aria-label="Close menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+  </button>
+  <a href="#top" class="m-link"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</a>
+  <a href="#about" class="m-link"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>About</a>
+  <a href="#research" class="m-link"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v5l4 9a2 2 0 0 1-2 3H7a2 2 0 0 1-2-3l4-9V3z"/></svg>Research</a>
+  <a href="#experience" class="m-link"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="2"/></svg>Experience</a>
+  <a href="#education" class="m-link"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5-10-5z"/></svg>Education</a>
+  <a href="#skills" class="m-link"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 2 12 8 18"/><polyline points="16 6 22 12 16 18"/></svg>Skills</a>
+  <a href="#contact" class="m-link"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/></svg>Contact</a>
+</div>
+
+<main class="content">
+
+  <section id="top" class="card hero-card reveal">
+    <div class="avatar-wrap">
+      <div class="avatar-ring"></div>
+      <img src="public/images/Armaghan.jpeg" alt="Portrait of Armaghan Nikfar">
+    </div>
+    <h1>Hi, I'm <span class="accent">Armaghan</span></h1>
+    <div class="role-line mono">AI Developer | Frontend Engineer | Researcher | Professor</div>
+    <p class="desc">I build production web applications and design deep learning systems that support real-world decisions — from clinical data to operational forecasting.</p>
+    <div class="cta-row">
+      <a href="#research" class="btn btn-primary">View My Work</a>
+      <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+    </div>
+  </section>
+
+  <section id="about" class="card reveal">
+    <span class="card-tag mono">01 · About</span>
+    <h2>About Me</h2>
+    <div class="about-body">
+      <img class="about-photo" src="public/images/Armaghan.jpeg" alt="Portrait of Armaghan Nikfar">
+      <div class="about-text">
+        <p>I'm a frontend developer working across React, Redux, Next.js, and Python, alongside applied AI research that sits outside a typical product roadmap: diagnosing infectious disease from patient data, forecasting operational demand, and building conversational agents for clinical and customer-facing use.</p>
+        <p>My research applies recurrent architectures — LSTM, BLSTM, and reinforcement learning — to real clinical and operational data, usually alongside domain experts who validate what the model is actually learning. I'm currently pursuing a PhD in artificial intelligence, with an emphasis on AI applications in medicine.</p>
+        <div class="stat-row">
+          <div class="stat"><span class="n">2</span><span class="l mono">PAPERS PUBLISHED</span></div>
+          <div class="stat"><span class="n">7+</span><span class="l mono">YEARS IN DEV</span></div>
+          <div class="stat"><span class="n">EN·FA·RU</span><span class="l mono">LANGUAGES</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="research" class="card reveal">
+    <span class="card-tag mono">02 · Research</span>
+    <h2>Selected Research</h2>
+    <p class="lede">Two peer-reviewed papers applying deep learning to healthcare and operations — built on real-world data, with domain-expert collaborators who kept the models honest.</p>
+
+    <article class="paper">
+      <div class="paper-meta">
+        <span>Network Modeling Analysis in Health Informatics &amp; Bioinformatics · Springer</span>
+        <span>2025</span>
+      </div>
+      <h3>A Novel LSTM-Based Multimodal System for Robust Diagnosis of Respiratory Infectious Diseases</h3>
+      <p>An improved LSTM (iLSTM) model diagnosing colds, flu, and related infectious diseases from structured patient data — vitals, lab results, and symptoms — combined with OCR-extracted test results and a natural-language QA layer that gathers information directly from patients. Designed as a decision-support tool that reduces diagnostic error and speeds up triage.</p>
+      <div class="note-box">
+        <b>Clinical Collaboration</b>
+        Carried out with practicing physicians. My husband, a physician in Saint Petersburg completing his surgical residency at I.I. Mechnikov North-Western State Medical University, worked with specialists from Volgograd State Medical University to define diagnostic criteria and validate the model against real clinical practice.
+      </div>
+      <div class="tag-row">
+        <span class="tag">LSTM</span><span class="tag">NLP / QA</span><span class="tag">OCR</span><span class="tag">Healthcare AI</span>
+      </div>
+      <a class="paper-link" href="https://link.springer.com/article/10.1007/s13721-025-00659-2" target="_blank" rel="noopener">Read on SpringerLink ↗</a>
+    </article>
+
+    <article class="paper">
+      <div class="paper-meta">
+        <span>BenchCouncil Transactions on Benchmarks, Standards and Evaluations · ScienceDirect</span>
+        <span>2025</span>
+      </div>
+      <h3>Predicting the Number of Incoming Calls to a Call Center Using Deep Learning</h3>
+      <p>A Bidirectional LSTM (BLSTM) forecasting model trained on four years of real call-center data from Shatel, an Iranian ISP. Predicts incoming call volume accounting for holidays, seasonal patterns, and cultural factors — ~90% accuracy, outperforming unidirectional-LSTM approaches, directly improving staffing efficiency.</p>
+      <div class="tag-row">
+        <span class="tag">BLSTM</span><span class="tag">Time-Series Forecasting</span><span class="tag">Operations AI</span>
+      </div>
+      <a class="paper-link" href="https://www.sciencedirect.com/science/article/pii/S2772485925000262" target="_blank" rel="noopener">Read on ScienceDirect ↗</a>
+    </article>
+  </section>
+
+  <section id="experience" class="card reveal">
+    <span class="card-tag mono">03 · Career</span>
+    <h2>Experience</h2>
+    <div class="timeline" style="margin-top:30px;">
+      <div class="t-item">
+        <div class="t-node"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="2"/></svg></div>
+        <div class="t-year mono">2015 – 2017</div>
+        <div class="t-role">Frontend Developer</div>
+        <span class="t-org">Masir Sabz Nikan · Iran</span>
+        <p>Two years of frontend development experience, including an internship building interfaces with early-stage JavaScript frameworks.</p>
+      </div>
+      <div class="t-item">
+        <div class="t-node"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="2"/></svg></div>
+        <div class="t-year mono">2017 – 2026</div>
+        <div class="t-role">Full-Stack Developer</div>
+        <span class="t-org">Shatel · Iran</span>
+        <ul>
+          <li>Handled customer technical requirements and designed solutions for Shatel's CTS platform</li>
+          <li>Built and maintained applications in React, Redux, MUI, Tailwind CSS, JavaScript, Node.js, and Chrome extensions</li>
+          <li>Designed responsive interfaces for complex, data-heavy web tools</li>
+          <li>Owned development, deployment, testing, and debugging across the stack</li>
+        </ul>
+      </div>
+      <div class="t-item current">
+        <div class="t-node"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 2 12 8 18"/><polyline points="16 6 22 12 16 18"/></svg></div>
+        <div class="t-year mono">2023 – Now</div>
+        <div class="t-role">AI Developer — Independent Research</div>
+        <span class="t-org">Freelance</span>
+        <ul>
+          <li>Built a BLSTM model to forecast incoming call center volume</li>
+          <li>Developed a transformer-based technical chatbot for sales and customer service</li>
+          <li>Designed a reinforcement-learning medical model for disease diagnosis</li>
+          <li>Built an NLP-based chatbot for medical clinic appointment scheduling</li>
+        </ul>
+      </div>
+      <div class="t-item">
+        <div class="t-node"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5-10-5z"/></svg></div>
+        <div class="t-year mono">2024 – 2025</div>
+        <div class="t-role">Professor</div>
+        <span class="t-org">Islamic Azad University of Karaj</span>
+        <p>Taught computer science subjects including networking and web design.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="education" class="card reveal">
+    <span class="card-tag mono">04 · Academic Path</span>
+    <h2>Education</h2>
+    <p class="lede">My learning journey and where it stands today.</p>
+    <div class="edu-cols">
+      <div class="edu-col">
+        <h4>Education</h4>
+        <div class="edu-row">
+          <div class="edu-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5-10-5z"/></svg></div>
+          <div><h5>PhD in Artificial Intelligence</h5><span>ETU · In progress · 2026</span></div>
+        </div>
+        <div class="edu-row">
+          <div class="edu-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5-10-5z"/></svg></div>
+          <div><h5>M.Sc. in AI &amp; Robotics</h5><span>Islamic Azad University of Karaj · 2023–2025</span></div>
+        </div>
+        <div class="edu-row">
+          <div class="edu-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5-10-5z"/></svg></div>
+          <div><h5>B.Sc. in Software Engineering</h5><span>Islamic Azad University of Karaj · 2017–2021</span></div>
+        </div>
+      </div>
+      <div class="edu-col">
+        <h4>Highlights</h4>
+        <div class="edu-row">
+          <div class="edu-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v5l4 9a2 2 0 0 1-2 3H7a2 2 0 0 1-2-3l4-9V3z"/></svg></div>
+          <div><h5>2 Peer-Reviewed Papers</h5><span>Springer &amp; ScienceDirect · 2025</span></div>
+        </div>
+        <div class="edu-row">
+          <div class="edu-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18"/></svg></div>
+          <div><h5>Russian Language, Prep Faculty</h5><span>РГГМУ · 2025–2026</span></div>
+        </div>
+        <div class="edu-row">
+          <div class="edu-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="2"/></svg></div>
+          <div><h5>Professor, Computer Science</h5><span>Islamic Azad University of Karaj · 2024–2025</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="card reveal">
+    <span class="card-tag mono">05 · Toolkit</span>
+    <h2>My Skills</h2>
+    <p class="lede">Seven+ years of hands-on development, paired with applied research in deep learning — using modern tools across the stack.</p>
+    <div class="skills-body">
+      <svg class="skills-illus" viewBox="0 0 200 200" fill="none">
+        <rect x="26" y="46" width="148" height="98" rx="12" fill="#0E1524" stroke="#4FD1FF" stroke-opacity="0.4"/>
+        <line x1="42" y1="70" x2="98" y2="70" stroke="#4FD1FF" stroke-width="3" stroke-linecap="round"/>
+        <line x1="42" y1="86" x2="140" y2="86" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+        <line x1="42" y1="102" x2="120" y2="102" stroke="#4FD1FF" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+        <line x1="42" y1="118" x2="150" y2="118" stroke="#E14EC0" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+        <circle cx="158" cy="40" r="20" fill="#0E1524" stroke="#4FD1FF" stroke-opacity="0.5"/>
+        <text x="158" y="46" font-size="16" fill="#4FD1FF" text-anchor="middle" font-family="monospace">&lt;/&gt;</text>
+        <circle cx="34" cy="158" r="18" fill="#0E1524" stroke="#8B5CF6" stroke-opacity="0.5"/>
+        <path d="M34 149a9 9 0 1 0 0 18 9 9 0 0 0 0-18z" fill="none" stroke="#8B5CF6" stroke-width="2"/>
+        <path d="M34 146v3M34 167v3M25 158h-3M46 158h3" stroke="#8B5CF6" stroke-width="2"/>
+      </svg>
+      <div class="skills-bars">
+        <div class="bar-item"><div class="bar-top"><span>JavaScript (ES6+)</span><span class="mono">100%</span></div><div class="bar-track"><div class="bar-fill" data-w="100"></div></div></div>
+        <div class="bar-item"><div class="bar-top"><span>React.js / Redux</span><span class="mono">100%</span></div><div class="bar-track"><div class="bar-fill" data-w="100"></div></div></div>
+        <div class="bar-item"><div class="bar-top"><span>Node.js</span><span class="mono">100%</span></div><div class="bar-track"><div class="bar-fill" data-w="100"></div></div></div>
+        <div class="bar-item"><div class="bar-top"><span>Python / Deep Learning</span><span class="mono">100%</span></div><div class="bar-track"><div class="bar-fill" data-w="100"></div></div></div>
+      <div class="bar-item"><div class="bar-top"><span>Next.js / Tailwind CSS</span><span class="mono">100%</span></div><div class="bar-track"><div class="bar-fill" data-w="100"></div></div></div>
+     <div class="bar-item"><div class="bar-top"><span>Deep Learning</span><span class="mono">100%</span></div><div class="bar-track"><div class="bar-fill" data-w="100"></div></div></div> 
+   <div class="bar-item"><div class="bar-top"><span>Machine Learning</span><span class="mono">100%</span></div><div class="bar-track"><div class="bar-fill" data-w="100"></div></div></div>
+   <div class="bar-item"><div class="bar-top"><span>NLP / Transformers</span><span class="mono">100%</span></div><div class="bar-track"><div class="bar-fill" data-w="100"></div></div></div>
+   <div class="bar-item"><div class="bar-top"><span>Git / GitHub</span><span class="mono">100%</span></div><div class="bar-track"><div class="bar-fill" data-w="100"></div></div></div>
+  <div class="bar-item"><div class="bar-top"><span>Chrome Extensions</span><span class="mono">100%</span></div><div class="bar-track"><div class="bar-fill" data-w="100"></div></div></div> 
+<div class="bar-item"><div class="bar-top"><span>RESTful APIs</span><span class="mono">100%</span></div><div class="bar-track"><div class="bar-fill" data-w="100"></div></div></div> 
+</div>
+    </div>
+    <div class="pill-row">
+      <span class="pill">HTML &amp; CSS</span><span class="pill">Next.js</span><span class="pill">Material UI</span>
+      <span class="pill">Tailwind CSS</span><span class="pill">RESTful APIs</span><span class="pill">Transformers</span>
+      <span class="pill">Reinforcement Learning</span><span class="pill">Git</span><span class="pill">Chrome Extensions</span>
+    </div>
+  </section>
+
+  <section id="contact" class="card contact-card reveal">
+    <span class="card-tag mono" style="justify-content:center;">06 · Let's Talk</span>
+    <h2>Open to full-stack and applied&nbsp;AI collaborations.</h2>
+    <p class="lede">Based in Karaj, Iran and Saint Petersburg, Russia — working remotely with teams anywhere.</p>
+    <div class="contact-links">
+      <a href="mailto:Armaghannikfar@gmail.com">✉ Armaghannikfar@gmail.com</a>
+      <a href="tel:+989981511296">📞 +98 998 151 1296</a>
+      <a href="tel:+79880354332">📞 +7 988 035 4332</a>
+      <a href="https://github.com/ArmaghanNikfar" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+    <div class="foot-meta">© 2026 Armaghan Nikfar · AI Developer &amp; Full-Stack Engineer</div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* mobile menu toggle */
+  var menuBtn = document.getElementById('menuBtn');
+  var menuClose = document.getElementById('menuClose');
+  var mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', function(){ mobileMenu.classList.add('open'); });
+  menuClose.addEventListener('click', function(){ mobileMenu.classList.remove('open'); });
+  mobileMenu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ mobileMenu.classList.remove('open'); });
+  });
+
+  /* dock active state + skill bar fill on reveal */
+  var sections = document.querySelectorAll('main.content section[id]');
+  var dockItems = document.querySelectorAll('.dock-item');
+  var bars = document.querySelectorAll('.bar-fill');
+
+  function activateDock(id){
+    dockItems.forEach(function(d){
+      d.classList.toggle('active', d.getAttribute('data-section') === id);
+    });
+  }
+
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.classList.add('in');
+          activateDock(e.target.id);
+          if(e.target.id === 'skills'){
+            bars.forEach(function(b){ b.style.width = b.getAttribute('data-w') + '%'; });
+          }
+        }
+      });
+    }, {threshold:0.35});
+    sections.forEach(function(s){ io.observe(s); });
+  } else {
+    sections.forEach(function(s){ s.classList.add('in'); });
+    bars.forEach(function(b){ b.style.width = b.getAttribute('data-w') + '%'; });
+  }
+
+  if(reduced){
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    bars.forEach(function(b){ b.style.width = b.getAttribute('data-w') + '%'; });
+  }
+})();
+</script>
+
+</body>
+</html>
