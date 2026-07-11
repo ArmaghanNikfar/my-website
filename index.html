@@ -610,14 +610,18 @@
   var bars = document.querySelectorAll('.bar-fill');
 
   function activateDock(id){
-    dockItems.forEach(function(item){
+  dockItems.forEach(function(item){
   item.addEventListener('click', function(e){
     e.preventDefault();
+    var id = item.getAttribute('href').replace('#','');
     var target = document.querySelector(item.getAttribute('href'));
     if(target){
-      target.scrollIntoView({behavior:'smooth', block:'center'});
+      var centerSections = ['top','about','education'];
+      var position = centerSections.indexOf(id) !== -1 ? 'center' : 'start';
+      target.scrollIntoView({behavior:'smooth', block:position});
     }
   });
+
 });
   }
 
