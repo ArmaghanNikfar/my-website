@@ -610,9 +610,15 @@
   var bars = document.querySelectorAll('.bar-fill');
 
   function activateDock(id){
-    dockItems.forEach(function(d){
-      d.classList.toggle('active', d.getAttribute('data-section') === id);
-    });
+    dockItems.forEach(function(item){
+  item.addEventListener('click', function(e){
+    e.preventDefault();
+    var target = document.querySelector(item.getAttribute('href'));
+    if(target){
+      target.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  });
+});
   }
 
   if('IntersectionObserver' in window){
